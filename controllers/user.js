@@ -1,27 +1,36 @@
-var soap = require('soap');
-var url = 'https://api.demo.ezidebit.com.au/v3-5/nonpci?singleWsdl';
-var custUrl = 'https://api.demo.ezidebit.com.au/v3-5/pci?singleWsdl';
-var args = {
-  DigitalKey: '', PaymentType: 'ALL',
-  PaymentMethod: "ALL",
-  PaymentSource: "ALL",
-  DateFrom: "2017-06-12",
-  DateTo: "2019-12-02",
-  DateField: "SETTLEMENT"
-};
+const soap = require('soap');
+const wsdlUrl = 'https://api.demo.ezidebit.com.au/v3-5/nonpci?singleWsdl';
+const custUrl = 'https://api.demo.ezidebit.com.au/v3-5/pci?singleWsdl';
 
 const paymentAPI = async function (req, res, next) {
   try {
-    soap.createClientAsync(url).then((client) => {
-      return client.GetCustomerList({
-        DigitalKey: '',
-        CustomerStatus: "ALL",
-        PageNumber: 1
-      });
-    }).then((result, error) => {
-      console.log(result);
+    soap.createClient(wsdlUrl, function (err, soapClient) {
 
-      res.send({ message: "API call is successfull", status: 200 });
+      soapClient.GetCustomerList({
+        DigitalKey: '',
+        CustomerStatus: 'ALL',
+        PageNumber: '1'
+      }, function (err, result) {
+        console.log(".....", result);
+      });
+
+      soapClient.GetScheduledPayments({
+        DigitalKey: ''
+      }, function (err, result) {
+        console.log(".....", result);
+      });
+
+
+      soapClient.GetPayments({
+        DigitalKey: '',
+        PaymentType: 'ALL',
+        PaymentMethod: 'ALL',
+        PaymentSource: 'ALL'
+      }, function (err, result) {
+        console.log(".....", result);
+      });
+
+      // we now have a soapClient - we also need to make sure there's no `err` here. 
     });
 
   } catch (err) {
