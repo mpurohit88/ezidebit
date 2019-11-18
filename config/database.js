@@ -7,7 +7,7 @@ dbOptions = {
   user: 'root',
   // password: '',
   password: '',
-  database: ''
+  database: 'rentronicsnew_auce'
 };
 
 //This will depend on which version/module/db you're using, but here's what mine looks like
